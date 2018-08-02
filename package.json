@@ -19,6 +19,7 @@
   "homepage": "https://gitlab.com/fxlemire/smooch-plays-tetris#README",
   "devDependencies": {
     "eslint": "^5.2.0",
-    "eslint-config-airbnb-base": "^13.0.0"
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0"
   }
 }
