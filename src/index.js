@@ -8,14 +8,6 @@ const socketio = require('socket.io');
 const { sendKeys } = require('./sendKeys');
 const { VALID_CHARACTERS, sendMessage, sendPayload } = require('./smooch');
 
-const VALID_CHARACTERS = {
-  q: 'left',
-  w: 'right',
-  a: 'z',
-  s: 'x',
-  z: 'down',
-};
-
 const app = express();
 const server = http.Server(app);
 const io = socketio(server);

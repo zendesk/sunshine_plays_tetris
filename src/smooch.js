@@ -35,12 +35,7 @@ const MESSAGE_BASE = {
   text: '',
   role: 'appMaker',
   name: 'Smooch Tetris',
-  avatarUrl: 'https://http://fxlemire.ngrok.io/assets/SmoochTetris.png',
-  actions: Object.keys(VALID_CHARACTERS).map(c => ({
-    type: 'reply',
-    text: VALID_CHARACTERS[c].icon,
-    payload: c,
-  })),
+  avatarUrl: 'https://fxlemire.ngrok.io/assets/SmoochTetris.png',
 };
 
 exports.sendMessage = (userId, message) => {
