@@ -14,19 +14,19 @@ const ACTIONS = {
   actions: [{
     type: 'reply',
     text: '👈',
-    payload: 'a',
+    payload: 'q',
   }, {
     type: 'reply',
     text: '👉',
-    payload: 's',
-  }, {
-    type: 'reply',
-    text: '↪',
-    payload: 'z',
+    payload: 'w',
   }, {
     type: 'reply',
     text: '↩',
-    payload: 'x',
+    payload: 'e',
+  }, {
+    type: 'reply',
+    text: '👇',
+    payload: 'd',
   }],
 };
 

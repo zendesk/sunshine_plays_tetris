@@ -5,7 +5,13 @@ const express = require('express');
 const { sendKeys } = require('./sendKeys');
 const { sendPayload } = require('./smooch');
 
-const VALID_CHARACTERS = ['z', 'x', 'a', 's'];
+const VALID_CHARACTERS = {
+  q: 'left',
+  w: 'right',
+  a: 'z',
+  s: 'x',
+  z: 'down',
+};
 
 const app = express();
 
@@ -22,16 +28,19 @@ app.post('/messages', async (req, res) => {
     return;
   }
 
-  const { appUser, messages } = req.body;
+  // const { appUser, messages } = req.body;
+  const { messages } = req.body;
 
   messages.forEach((message) => {
-    const validChars = (message.payload || message.text).toLowerCase().split('').filter(c => VALID_CHARACTERS.includes(c)).join('');
-
-    sendKeys(validChars);
-  // console.log(validChars);
+    console.log((message.payload || message.text)
+      .toLowerCase()
+      .split('')
+      .map(c => VALID_CHARACTERS[c])
+      .filter(v => v)
+      .map(sendKeys));
   });
 
-  sendPayload(appUser._id); // eslint-disable-line no-underscore-dangle
+  // sendPayload(appUser._id); // eslint-disable-line no-underscore-dangle
 
   res.end();
 });

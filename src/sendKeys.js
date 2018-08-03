@@ -1,5 +1,6 @@
-const sendkeys = require('sendkeys');
+const robot = require('robotjs');
 
-exports.sendKeys = (keys) => {
-  sendkeys(keys);
+exports.sendKeys = (key) => {
+  robot.keyTap(key);
+  return key;
 };
