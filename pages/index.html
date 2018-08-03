@@ -177,9 +177,9 @@
 <script src="/assets/blockrain.jquery.min.js"></script>
 
 <script>
-	var music = new Audio('/assets/tetris.mp3');
-	music.loop = true;
-	music.play();
+	var musicStart = new Audio('/assets/tetris.mp3');
+	musicStart.loop = true;
+	var musicGameover = new Audio('/assets/gameover.mp3');
 	var socket = io();
 
 	var colors = [
@@ -233,13 +233,20 @@
 		// Basic Callbacks
 		onStart: function () {
 			started = true;
+			musicStart.play();
 		},
 		onRestart: function () {
 			$('#history').empty();
+			musicGameover.pause();
+			musicGameover.currentTime = 0;
+			musicStart.currentTime = 0;
+			musicStart.play();
 		},
 		onGameOver: function (score) {
 			started = false;
 			socket.emit('gg', score);
+			musicStart.pause();
+			musicGameover.play();
 		},
 
 		// When a line is made. Returns the number of lines, score assigned and total score
