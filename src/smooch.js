@@ -1,5 +1,30 @@
 const SmoochCore = require('smooch-core');
 
+const VALID_CHARACTERS = {
+  q: {
+    key: 'left',
+    icon: '👈',
+  },
+  w: {
+    key: 'right',
+    icon: '👉',
+  },
+  a: {
+    key: 'z',
+    icon: '↺',
+  },
+  s: {
+    key: 'x',
+    icon: '↻',
+  },
+  z: {
+    key: 'down',
+    icon: '👎',
+  },
+};
+
+exports.VALID_CHARACTERS = VALID_CHARACTERS;
+
 const Smooch = new SmoochCore({
   keyId: process.env.SMOOCH_KEY_ID,
   secret: process.env.SMOOCH_SECRET,
@@ -11,23 +36,11 @@ const ACTIONS = {
   role: 'appMaker',
   name: 'Smooch Tetris',
   avatarUrl: 'https://http://fxlemire.ngrok.io/assets/SmoochTetris.png',
-  actions: [{
+  actions: Object.keys(VALID_CHARACTERS).map(c => ({
     type: 'reply',
-    text: '👈',
-    payload: 'q',
-  }, {
-    type: 'reply',
-    text: '👉',
-    payload: 'w',
-  }, {
-    type: 'reply',
-    text: '↩',
-    payload: 'e',
-  }, {
-    type: 'reply',
-    text: '👇',
-    payload: 'd',
-  }],
+    text: VALID_CHARACTERS[c].icon,
+    payload: c,
+  })),
 };
 
 exports.sendPayload = (userId) => {

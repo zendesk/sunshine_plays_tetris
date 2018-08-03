@@ -6,15 +6,7 @@ const http = require('http');
 const socketio = require('socket.io');
 
 const { sendKeys } = require('./sendKeys');
-const { sendPayload } = require('./smooch');
-
-const VALID_CHARACTERS = {
-  q: 'left',
-  w: 'right',
-  a: 'z',
-  s: 'x',
-  z: 'down',
-};
+const { VALID_CHARACTERS, sendPayload } = require('./smooch');
 
 const app = express();
 const server = http.Server(app);
@@ -32,28 +24,33 @@ app.post('/messages', async (req, res) => {
     return;
   }
 
-  // const { appUser, messages } = req.body;
-  const { messages } = req.body;
+  const { appUser, messages } = req.body;
+  // const { messages } = req.body;
+  let channel;
 
   messages.forEach((message) => {
+    channel = message.source.type;
+
     const sentKeys = (message.payload || message.text)
       .toLowerCase()
       .split('')
-      .map(c => VALID_CHARACTERS[c])
+      .map(c => VALID_CHARACTERS[c] && VALID_CHARACTERS[c].key)
       .filter(v => v)
       .map(sendKeys);
 
     if (sentKeys.length) {
       io.emit('command', {
         user: message.name,
-        keys: sentKeys
+        keys: sentKeys,
       });
     }
 
     console.log(sentKeys);
   });
 
-  // sendPayload(appUser._id); // eslint-disable-line no-underscore-dangle
+  if (channel === 'viber') {
+    sendPayload(appUser._id); // eslint-disable-line no-underscore-dangle
+  }
 
   res.end();
 });
