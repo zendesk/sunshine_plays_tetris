@@ -34,20 +34,26 @@
 			list-style: none;
 		}
 
-		.user {
+        .history-entry img.channel {
+            display: inline;
+            width: 32px;
+            vertical-align: middle;
+        }
+
+        .history-entry .user {
 			font-size: 16pt;
 			font-weight: bold;
 		}
 
-		.command {
+        .history-entry .command {
 			color: rgba(255, 255, 255, 0.75);
 		}
 
-		.command .emoji {
+        .history-entry .command .emoji {
 			font-size: 16pt;
 		}
 
-		.command .symbol {
+        .history-entry .command .symbol {
 			font-size: 24pt;
 		}
 	</style>
@@ -157,8 +163,9 @@
 	  }
 	});
     $('#history').append(`
-		<li>
-			<span class="user" style="color: ${color};">${command.user}</span>
+		<li class="history-entry">
+		    <img class="channel" src="https://smooch.io/static_assets/images/home/icon-channels/icon-${command.channel}-gray.svg"/>
+			<span class="user" style="color: ${color};">${command.user || 'ąɲ๏ɲ'}</span>
 			<span class="command">${keys.join(', ')}</span>
 		</li>
 	`);

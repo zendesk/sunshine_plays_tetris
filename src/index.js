@@ -46,6 +46,7 @@ app.post('/messages', async (req, res) => {
     if (sentKeys.length) {
       io.emit('command', {
         user: message.name,
+        channel: message.source && message.source.type,
         keys: sentKeys
       });
     }
