@@ -77,6 +77,24 @@
 			background-color: #3d2c4e;
 		}
 
+        #score {
+            position: absolute;
+            top: 0;
+            right: 17em;
+        }
+
+        #score table {
+            text-align: center;
+        }
+
+        #score th {
+            padding: 1em;
+        }
+
+        #score tr {
+            background-color: #3d2c4e;
+        }
+
 		#channels {
 			position: absolute;
 			top: 0;
@@ -141,6 +159,8 @@
 		</tr>
 	</table>
 </div>
+
+<div id="score"></div>
 
 <div id="channels">
 	<div class="messenger">
@@ -251,47 +271,106 @@
 
 		// When a line is made. Returns the number of lines, score assigned and total score
 		onLine: function (lines, scoreIncrement, score) {
+            if (lastMove) {
+              lastMove.score += scoreIncrement;
+              lastMove.lines++;
+              log(lastMove, `Scored ${scoreIncrement}`);
+              lastMove = null;
 
+              if (lastAssist) {
+                lastAssist.assists++;
+                log(lastAssist, `Assisted ${lastMove.name} for that last line`);
+                lastAssist = null;
+              }
+            }
+
+            renderScoring();
         }
 	});
 
-	var users = [];
+	function renderScoring() {
+	    var rows = "";
+	    Object.values(users).forEach(function (user) {
+            rows += `
+               <tr><td>${user.name}</td><td>${user.score}</td><td>${user.lines}</td><td>${user.assists}</td></tr>
+            `;
+        });
+        $('#score').html(`
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Score</th>
+                        <th>Lines</th>
+                        <th>Assists</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>
+        `);
+    }
 
-	function log(channel, user, message) {
-		var index = users.indexOf(user);
-		if (index === -1) {
-			users.push(user);
-			index = users.length - 1;
-		}
-		var color = colors[index % colors.length];
+	var users = {};
+	var lastMove = null;
+	var lastAssist = null;
+
+	function getUser(message) {
+      var user = users[message.user];
+      if (!user) {
+        user = {
+          name: message.user,
+          color: colors[Object.keys(users).length % colors.length],
+          channel: message.channel,
+          score: 0,
+          lines: 0,
+          assists: 0
+        };
+        users[message.user] = user;
+      }
+      return user;
+    }
+
+    function emoji(val) {
+      return `<span class="emoji">${val}</span>`;
+    }
+
+    function symbol(val) {
+      return `<span class="symbol">${val}</span>`;
+    }
+
+	function log(user, message) {
 		$('#history').append(`
 		<li class="history-entry">
-		    <img class="channel" src="https://smooch.io/static_assets/images/home/icon-channels/icon-${channel}-gray.svg"/>
-			<span class="user" style="color: ${color};">${user || 'ąɲ๏ɲ'}</span>
+		    <img class="channel" src="https://smooch.io/static_assets/images/home/icon-channels/icon-${user.channel}-gray.svg"/>
+			<span class="user" style="color: ${user.color};">${user.name || 'ąɲ๏ɲ'}</span>
 			<span class="command">${message}</span>
 		</li>
 	`);
 	}
 
 	socket.on('restart', function (restart) {
-		$('.game').blockrain('restart');
-		log(restart.channel, restart.user, 'Restarted the game!');
+        var user = getUser(restart);
+        var $game = $('.game');
+
+		$game.blockrain('restart');
+		log(user, 'Restarted the game!');
 	});
 
 	socket.on('command', function (command) {
+	    var user = getUser(command);
 	    var $game = $('.game');
 
 		if (!started) {
 			$game.blockrain('start');
 		}
 
-		function emoji(val) {
-			return `<span class="emoji">${val}</span>`;
-		}
-
-		function symbol(val) {
-			return `<span class="symbol">${val}</span>`;
-		}
+        if (user !== lastMove) {
+          lastAssist = lastMove;
+        }
+        lastMove = user;
+        user.moves++;
 
 		var keys = [];
 		command.keys.forEach(key => {
@@ -327,7 +406,8 @@
 			}
 		});
 
-		log(command.channel, command.user, keys.join(' '));
+		log(user, keys.join(' '));
+        renderScoring();
 	});
 </script>
 
