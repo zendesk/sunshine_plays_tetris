@@ -250,7 +250,9 @@
 		},
 
 		// When a line is made. Returns the number of lines, score assigned and total score
-		onLine: function (lines, scoreIncrement, score) { }
+		onLine: function (lines, scoreIncrement, score) {
+
+        }
 	});
 
 	var users = [];
@@ -277,8 +279,10 @@
 	});
 
 	socket.on('command', function (command) {
+	    var $game = $('.game');
+
 		if (!started) {
-			$('.game').blockrain('start');
+			$game.blockrain('start');
 		}
 
 		function emoji(val) {
@@ -289,20 +293,35 @@
 			return `<span class="symbol">${val}</span>`;
 		}
 
-		var keys = command.keys.map(key => {
+		var keys = [];
+		command.keys.forEach(key => {
 			switch (key) {
-				case 'left':
-					return emoji('👈');
+                case 'left':
+                    $game.blockrain('moveLeft', true);
+                    $game.blockrain('moveLeft', false);
+                    keys.push(emoji('👈'));
+                    break;
 				case 'right':
-					return emoji('👉');
+                    $game.blockrain('moveRight', true);
+                    $game.blockrain('moveRight', false);
+                    keys.push(emoji('👉'));
+                    break;
 				case 'up':
-					return emoji('🖕');
+                    keys.push(emoji('🖕'));
+                    break;
 				case 'down':
-					return emoji('👇');
+                    $game.blockrain('drop', true);
+                    $game.blockrain('drop', false);
+                    keys.push(emoji('👇'));
+                    break;
 				case 'z':
-					return symbol('↺');
+                    $game.blockrain('rotateLeft');
+                    keys.push(symbol('↺'));
+                    break;
 				case 'x':
-					return symbol('↻');
+                    $game.blockrain('rotateRight');
+                    keys.push(symbol('↻'));
+                    break;
 				default:
 					return key;
 			}

@@ -5,7 +5,6 @@ const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
 
-const { sendKeys } = require('./sendKeys');
 const { VALID_CHARACTERS, sendMessage, sendPayload } = require('./smooch');
 
 const app = express();
@@ -24,22 +23,21 @@ let canRestart = false;
 
 function handleKeys(message) {
   const channel = message.source.type;
-  const sentKeys = (message.payload || message.text)
+  const sendKeys = (message.payload || message.text)
     .toLowerCase()
     .split('')
     .map(c => VALID_CHARACTERS[c] && VALID_CHARACTERS[c].key)
-    .filter(v => v)
-    .map(sendKeys);
+    .filter(v => v);
 
-  if (sentKeys.length) {
+  if (sendKeys.length) {
     io.emit('command', {
       user: message.name,
       channel,
-      keys: sentKeys,
+      keys: sendKeys,
     });
   }
 
-  console.log(sentKeys);
+  console.log(sendKeys);
 }
 
 app.post('/messages', async (req, res) => {
