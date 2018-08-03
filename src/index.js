@@ -11,6 +11,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/', express.static('./tetris'));
 app.use('/assets', express.static('./assets'));
 app.set('env', process.env.NODE_ENV || 'development');
 app.set('port', process.env.PORT || 4000);
