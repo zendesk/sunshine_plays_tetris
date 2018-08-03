@@ -264,11 +264,11 @@
 			if (lastMove) {
 				lastMove.score += scoreIncrement;
 				lastMove.lines++;
-				log(lastMove, `Scored ${scoreIncrement}`);
+				log(lastMove, `Scored ${scoreIncrement} with ${lines} lines`);
 
 				if (lastAssist) {
 					lastAssist.assists++;
-					log(lastAssist, `Assisted ${lastMove.name} for that last line`);
+					log(lastAssist, `Assisted ${lastMove.name} with that`);
 					lastAssist = null;
 				}
 
@@ -280,9 +280,12 @@
 	});
 
 	function renderScoring() {
-		var rows = "";
-		Object.values(users).forEach(function (user) {
-			rows += `
+	    var sortedUsers = Object.values(users).sort((a,b) => {
+            return b.score - a.score;
+        });
+	    var rows = "";
+        sortedUsers.forEach(function (user) {
+            rows += `
                <tr><td>${user.name}</td><td>${user.score}</td><td>${user.lines}</td><td>${user.assists}</td></tr>
             `;
 		});
