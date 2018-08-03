@@ -57,7 +57,7 @@ app.post('/messages', async (req, res) => {
 
     channel = message.source.type;
 
-    switch (message.payload || message.text) {
+    switch ((message.payload || message.text).toLowerCase()) {
       case 'r':
         if (canRestart) {
           io.emit('restart', {
