@@ -263,7 +263,7 @@
 		onLine: function (lines, scoreIncrement, score) {
 			if (lastMove) {
 				lastMove.score += scoreIncrement;
-				lastMove.lines++;
+				lastMove.lines += lines;
 				log(lastMove, `Scored ${scoreIncrement} with ${lines} lines`);
 
 				if (lastAssist) {
