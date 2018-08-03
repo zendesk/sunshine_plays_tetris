@@ -19,7 +19,7 @@ const VALID_CHARACTERS = {
   },
   z: {
     key: 'down',
-    icon: '👎',
+    icon: '👇',
   },
 };
 
