@@ -6,10 +6,15 @@
 		body {
 			margin: 0;
 			padding: 0;
+			background-color: #191726;
+		}
+
+		.game {
+			margin: 0 auto;
 		}
 	</style>
 </head>
-<div class="game" style="width:100%; height:100%;"></div>
+<div class="game" style="width:33%; height:100%;"></div>
 <!-- The stylesheet should go in the <head>, or be included in your CSS -->
 <link rel="stylesheet" href="blockrain.css">
 
@@ -21,8 +26,26 @@
 		autoplay: false, // Let a bot play the game
 		autoplayRestart: true, // Restart the game automatically once a bot loses
 		showFieldOnStart: true, // Show a bunch of random blocks on the start screen (it looks nice)
-		theme: 'candy', // The theme name or a theme object
-		blockWidth: 10, // How many blocks wide the field is (The standard is 10 blocks)
+		theme: { // The theme name or a theme object
+			background: '#191726', // The main background color.
+			backgroundGrid: '#101010', // You can draw a small background grid as well.
+			primary: null, // Color of the falling blocks. This overrides the standard block color.
+			secondary: null, // Color of the placed blocks. This overrides the standard block color.
+			stroke: '#191726', // Border color for the blocks.
+			innerStroke: 'rgba(0, 0, 0, 0.25)', // A small border inside the blocks to give some texture.
+
+			// The following are the colors of each piece
+			blocks: {
+				line: '#9acbc6',
+				square: '#807fd5',
+				arrow: '#e82b7c',
+				rightHook: '#c9e9dc',
+				leftHook: '#a347b7',
+				rightZag: '#fecd00',
+				leftZag: '#8e58b6'
+			}
+		},
+		blockWidth: 30, // How many blocks wide the field is (The standard is 10 blocks)
 		autoBlockWidth: true, // The blockWidth is dinamically calculated based on the autoBlockSize. Disabled blockWidth. Useful for responsive backgrounds
 		autoBlockSize: 40, // The max size of a block for autowidth mode
 		difficulty: 'normal', // Difficulty (normal|nice|evil).
