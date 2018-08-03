@@ -10,7 +10,7 @@ const ACTIONS = {
   text: '',
   role: 'appMaker',
   name: 'Smooch Tetris',
-  avatarUrl: 'https://http://fxlemire.ngrok.io/static/SmoochTetris.png',
+  avatarUrl: 'https://http://fxlemire.ngrok.io/assets/SmoochTetris.png',
   actions: [{
     type: 'reply',
     text: '👈',
