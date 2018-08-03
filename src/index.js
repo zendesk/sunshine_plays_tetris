@@ -1,6 +1,9 @@
 require('dotenv-safe').load();
+const path = require('path');
 const cors = require('cors');
 const express = require('express');
+const http = require('http');
+const socketio = require('socket.io');
 
 const { sendKeys } = require('./sendKeys');
 const { sendPayload } = require('./smooch');
@@ -14,14 +17,15 @@ const VALID_CHARACTERS = {
 };
 
 const app = express();
+const server = http.Server(app);
+const io = socketio(server);
 
 app.use(cors());
 app.use(express.json());
-app.use('/', express.static('./tetris'));
+app.get('/', (req, res) => res.sendFile(path.resolve('./pages/index.html')));
 app.use('/assets', express.static('./assets'));
 app.set('env', process.env.NODE_ENV || 'development');
-app.set('port', process.env.PORT || 4000);
-
+app.set('port', process.env.PORT || 3000);
 
 app.post('/messages', async (req, res) => {
   if (!(req.body.messages && req.body.appUser)) {
@@ -32,12 +36,21 @@ app.post('/messages', async (req, res) => {
   const { messages } = req.body;
 
   messages.forEach((message) => {
-    console.log((message.payload || message.text)
+    const sentKeys = (message.payload || message.text)
       .toLowerCase()
       .split('')
       .map(c => VALID_CHARACTERS[c])
       .filter(v => v)
-      .map(sendKeys));
+      .map(sendKeys);
+
+    if (sentKeys.length) {
+      io.emit('command', {
+        user: message.name,
+        keys: sentKeys
+      });
+    }
+
+    console.log(sentKeys);
   });
 
   // sendPayload(appUser._id); // eslint-disable-line no-underscore-dangle
@@ -45,9 +58,9 @@ app.post('/messages', async (req, res) => {
   res.end();
 });
 
-app.listen(app.get('port'), (err) => {
+server.listen(app.get('port'), (err) => {
   if (err) {
-    console.log(err);
+    console.error(err);
     return;
   }
 

@@ -1,7 +1,13 @@
 <html>
-
 <head>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,900" rel="stylesheet">
 	<style type="text/css">
+		* {
+			font-family: 'Roboto', sans-serif;
+			color: #fff;
+			box-sizing: border-box;
+		}
+
 		html,
 		body {
 			margin: 0;
@@ -12,16 +18,61 @@
 		.game {
 			margin: 0 auto;
 		}
+
+		.history-container {
+			position: absolute;
+			overflow: hidden;
+			width: 33%;
+			top: 0;
+			bottom: 0;
+			padding: 0 1em;
+		}
+
+		#history {
+			list-style: none;
+		}
+
+		.user {
+			font-size: 16pt;
+			font-weight: bold;
+		}
+
+		.command {
+			color: rgba(255, 255, 255, 0.75);
+		}
+
+		.command .emoji {
+			font-size: 16pt;
+		}
+
+		.command .symbol {
+			font-size: 24pt;
+		}
 	</style>
 </head>
+<div class="history-container">
+<ol id="history"></ol>
+</div>
 <div class="game" style="width:33%; height:100%;"></div>
 <!-- The stylesheet should go in the <head>, or be included in your CSS -->
-<link rel="stylesheet" href="blockrain.css">
+<link rel="stylesheet" href="/assets/blockrain.css">
 
 <!-- jQuery and Blockrain.js -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="blockrain.jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/assets/blockrain.jquery.min.js"></script>
+
 <script>
+	var colors = [
+      '#9acbc6',
+      '#807fd5',
+      '#e82b7c',
+      '#c9e9dc',
+      '#a347b7',
+      '#fecd00',
+      '#8e58b6'
+	];
+
 	$('.game').blockrain({
 		autoplay: false, // Let a bot play the game
 		autoplayRestart: true, // Restart the game automatically once a bot loses
@@ -36,13 +87,13 @@
 
 			// The following are the colors of each piece
 			blocks: {
-				line: '#9acbc6',
-				square: '#807fd5',
-				arrow: '#e82b7c',
-				rightHook: '#c9e9dc',
-				leftHook: '#a347b7',
-				rightZag: '#fecd00',
-				leftZag: '#8e58b6'
+				line: colors[0],
+				square: colors[1],
+				arrow: colors[2],
+				rightHook: colors[3],
+				leftHook: colors[4],
+				rightZag: colors[5],
+				leftZag: colors[6]
 			}
 		},
 		blockWidth: 30, // How many blocks wide the field is (The standard is 10 blocks)
@@ -66,6 +117,50 @@
 		// When a line is made. Returns the number of lines, score assigned and total score
 		onLine: function (lines, scoreIncrement, score) { }
 	});
+
+  var socket = io();
+  var users = [];
+  socket.on('command', function(command) {
+    var index = users.indexOf(command.user);
+    if (index == -1) {
+      users.push(command.user);
+      index = users.length - 1;
+	}
+	var color = colors[index % colors.length];
+
+    function emoji(val) {
+      return `<span class="emoji">${val}</span>`;
+	}
+
+    function symbol(val) {
+      return `<span class="symbol">${val}</span>`;
+    }
+
+	var keys = command.keys.map(key => {
+	  switch (key) {
+        case 'left':
+          return emoji('👈');
+        case 'right':
+          return emoji('👉');
+        case 'up':
+          return emoji('🖕');
+        case 'down':
+          return emoji('👎');
+        case 'z':
+          return symbol('↺');
+        case 'x':
+          return symbol('↻');
+		default:
+		  return key;
+	  }
+	});
+    $('#history').append(`
+		<li>
+			<span class="user" style="color: ${color};">${command.user}</span>
+			<span class="command">${keys.join(', ')}</span>
+		</li>
+	`);
+  });
 </script>
 
 </html>
