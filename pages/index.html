@@ -77,23 +77,23 @@
 			background-color: #3d2c4e;
 		}
 
-        #score {
-            position: absolute;
-            top: 0;
-            right: 17em;
-        }
+		#score {
+			position: absolute;
+			top: 0;
+			right: 17em;
+		}
 
-        #score table {
-            text-align: center;
-        }
+		#score table {
+			text-align: center;
+		}
 
-        #score th {
-            padding: 1em;
-        }
+		#score th {
+			padding: 1em;
+		}
 
-        #score tr {
-            background-color: #3d2c4e;
-        }
+		#score tr {
+			background-color: #3d2c4e;
+		}
 
 		#channels {
 			position: absolute;
@@ -271,31 +271,32 @@
 
 		// When a line is made. Returns the number of lines, score assigned and total score
 		onLine: function (lines, scoreIncrement, score) {
-            if (lastMove) {
-              lastMove.score += scoreIncrement;
-              lastMove.lines++;
-              log(lastMove, `Scored ${scoreIncrement}`);
-              lastMove = null;
+			if (lastMove) {
+				lastMove.score += scoreIncrement;
+				lastMove.lines++;
+				log(lastMove, `Scored ${scoreIncrement}`);
 
-              if (lastAssist) {
-                lastAssist.assists++;
-                log(lastAssist, `Assisted ${lastMove.name} for that last line`);
-                lastAssist = null;
-              }
-            }
+				if (lastAssist) {
+					lastAssist.assists++;
+					log(lastAssist, `Assisted ${lastMove.name} for that last line`);
+					lastAssist = null;
+				}
 
-            renderScoring();
-        }
+				lastMove = null;
+			}
+
+			renderScoring();
+		}
 	});
 
 	function renderScoring() {
-	    var rows = "";
-	    Object.values(users).forEach(function (user) {
-            rows += `
+		var rows = "";
+		Object.values(users).forEach(function (user) {
+			rows += `
                <tr><td>${user.name}</td><td>${user.score}</td><td>${user.lines}</td><td>${user.assists}</td></tr>
             `;
-        });
-        $('#score').html(`
+		});
+		$('#score').html(`
             <table>
                 <thead>
                     <tr>
@@ -310,35 +311,35 @@
                 </tbody>
             </table>
         `);
-    }
+	}
 
 	var users = {};
 	var lastMove = null;
 	var lastAssist = null;
 
 	function getUser(message) {
-      var user = users[message.user];
-      if (!user) {
-        user = {
-          name: message.user,
-          color: colors[Object.keys(users).length % colors.length],
-          channel: message.channel,
-          score: 0,
-          lines: 0,
-          assists: 0
-        };
-        users[message.user] = user;
-      }
-      return user;
-    }
+		var user = users[message.user];
+		if (!user) {
+			user = {
+				name: message.user,
+				color: colors[Object.keys(users).length % colors.length],
+				channel: message.channel,
+				score: 0,
+				lines: 0,
+				assists: 0
+			};
+			users[message.user] = user;
+		}
+		return user;
+	}
 
-    function emoji(val) {
-      return `<span class="emoji">${val}</span>`;
-    }
+	function emoji(val) {
+		return `<span class="emoji">${val}</span>`;
+	}
 
-    function symbol(val) {
-      return `<span class="symbol">${val}</span>`;
-    }
+	function symbol(val) {
+		return `<span class="symbol">${val}</span>`;
+	}
 
 	function log(user, message) {
 		$('#history').append(`
@@ -351,63 +352,63 @@
 	}
 
 	socket.on('restart', function (restart) {
-        var user = getUser(restart);
-        var $game = $('.game');
+		var user = getUser(restart);
+		var $game = $('.game');
 
 		$game.blockrain('restart');
 		log(user, 'Restarted the game!');
 	});
 
 	socket.on('command', function (command) {
-	    var user = getUser(command);
-	    var $game = $('.game');
+		var user = getUser(command);
+		var $game = $('.game');
 
 		if (!started) {
 			$game.blockrain('start');
 		}
 
-        if (user !== lastMove) {
-          lastAssist = lastMove;
-        }
-        lastMove = user;
-        user.moves++;
+		if (user !== lastMove) {
+			lastAssist = lastMove;
+		}
+		lastMove = user;
+		user.moves++;
 
 		var keys = [];
 		command.keys.forEach(key => {
 			switch (key) {
-                case 'left':
-                    $game.blockrain('moveLeft', true);
-                    $game.blockrain('moveLeft', false);
-                    keys.push(emoji('👈'));
-                    break;
+				case 'left':
+					$game.blockrain('moveLeft', true);
+					$game.blockrain('moveLeft', false);
+					keys.push(emoji('👈'));
+					break;
 				case 'right':
-                    $game.blockrain('moveRight', true);
-                    $game.blockrain('moveRight', false);
-                    keys.push(emoji('👉'));
-                    break;
+					$game.blockrain('moveRight', true);
+					$game.blockrain('moveRight', false);
+					keys.push(emoji('👉'));
+					break;
 				case 'up':
-                    keys.push(emoji('🖕'));
-                    break;
+					keys.push(emoji('🖕'));
+					break;
 				case 'down':
-                    $game.blockrain('drop', true);
-                    $game.blockrain('drop', false);
-                    keys.push(emoji('👇'));
-                    break;
+					$game.blockrain('drop', true);
+					$game.blockrain('drop', false);
+					keys.push(emoji('👇'));
+					break;
 				case 'z':
-                    $game.blockrain('rotateLeft');
-                    keys.push(symbol('↺'));
-                    break;
+					$game.blockrain('rotateLeft');
+					keys.push(symbol('↺'));
+					break;
 				case 'x':
-                    $game.blockrain('rotateRight');
-                    keys.push(symbol('↻'));
-                    break;
+					$game.blockrain('rotateRight');
+					keys.push(symbol('↻'));
+					break;
 				default:
 					return key;
 			}
 		});
 
 		log(user, keys.join(' '));
-        renderScoring();
+		renderScoring();
 	});
 </script>
 
