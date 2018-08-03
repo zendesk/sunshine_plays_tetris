@@ -31,7 +31,7 @@ const Smooch = new SmoochCore({
   scope: 'app',
 });
 
-const ACTIONS = {
+const MESSAGE_BASE = {
   text: '',
   role: 'appMaker',
   name: 'Smooch Tetris',
@@ -43,6 +43,20 @@ const ACTIONS = {
   })),
 };
 
+exports.sendMessage = (userId, message) => {
+  Smooch.appUsers.sendMessage(userId, {
+    ...MESSAGE_BASE,
+    text: message,
+  });
+};
+
 exports.sendPayload = (userId) => {
-  Smooch.appUsers.sendMessage(userId, ACTIONS);
+  Smooch.appUsers.sendMessage(userId, {
+    ...MESSAGE_BASE,
+    actions: Object.keys(VALID_CHARACTERS).map(c => ({
+      type: 'reply',
+      text: VALID_CHARACTERS[c].icon,
+      payload: c,
+    })),
+  });
 };

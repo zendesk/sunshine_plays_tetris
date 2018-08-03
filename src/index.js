@@ -6,7 +6,15 @@ const http = require('http');
 const socketio = require('socket.io');
 
 const { sendKeys } = require('./sendKeys');
-const { VALID_CHARACTERS, sendPayload } = require('./smooch');
+const { VALID_CHARACTERS, sendMessage, sendPayload } = require('./smooch');
+
+const VALID_CHARACTERS = {
+  q: 'left',
+  w: 'right',
+  a: 'z',
+  s: 'x',
+  z: 'down',
+};
 
 const app = express();
 const server = http.Server(app);
@@ -19,6 +27,8 @@ app.use('/assets', express.static('./assets'));
 app.set('env', process.env.NODE_ENV || 'development');
 app.set('port', process.env.PORT || 3000);
 
+const users = [];
+
 app.post('/messages', async (req, res) => {
   if (!(req.body.messages && req.body.appUser)) {
     return;
@@ -29,6 +39,10 @@ app.post('/messages', async (req, res) => {
   let channel;
 
   messages.forEach((message) => {
+    if (!users.includes(message.authorId)) {
+      users.push(message.authorId);
+    }
+
     channel = message.source.type;
 
     const sentKeys = (message.payload || message.text)
@@ -41,7 +55,7 @@ app.post('/messages', async (req, res) => {
     if (sentKeys.length) {
       io.emit('command', {
         user: message.name,
-        channel: message.source && message.source.type,
+        channel,
         keys: sentKeys,
       });
     }
@@ -54,6 +68,14 @@ app.post('/messages', async (req, res) => {
   }
 
   res.end();
+});
+
+io.on('connection', (socket) => {
+  socket.on('gg', (score) => {
+    users.forEach((appUserId) => {
+      sendMessage(appUserId, `Game Over! Score: ${score}`);
+    });
+  });
 });
 
 server.listen(app.get('port'), (err) => {

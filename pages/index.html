@@ -72,6 +72,8 @@
 <script src="/assets/blockrain.jquery.min.js"></script>
 
 <script>
+    var socket = io();
+
 	var colors = [
       '#9acbc6',
       '#807fd5',
@@ -121,14 +123,16 @@
 		// Basic Callbacks
 		onStart: function () { },
 		onRestart: function () { },
-		onGameOver: function (score) { },
+		onGameOver: function (score) {
+            socket.emit('gg', score);
+        },
 
 		// When a line is made. Returns the number of lines, score assigned and total score
 		onLine: function (lines, scoreIncrement, score) { }
 	});
 
-  var socket = io();
   var users = [];
+
   socket.on('command', function(command) {
     var index = users.indexOf(command.user);
     if (index == -1) {
@@ -167,7 +171,7 @@
 		<li class="history-entry">
 		    <img class="channel" src="https://smooch.io/static_assets/images/home/icon-channels/icon-${command.channel}-gray.svg"/>
 			<span class="user" style="color: ${color};">${command.user || 'ąɲ๏ɲ'}</span>
-			<span class="command">${keys.join(', ')}</span>
+			<span class="command">${keys.join(' ')}</span>
 		</li>
 	`);
   });
