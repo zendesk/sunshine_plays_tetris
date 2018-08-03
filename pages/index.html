@@ -126,16 +126,16 @@
 <script src="/assets/blockrain.jquery.min.js"></script>
 
 <script>
-    var socket = io();
+	var socket = io();
 
 	var colors = [
-      '#9acbc6',
-      '#807fd5',
-      '#e82b7c',
-      '#c9e9dc',
-      '#a347b7',
-      '#fecd00',
-      '#8e58b6'
+		'#9acbc6',
+		'#807fd5',
+		'#e82b7c',
+		'#c9e9dc',
+		'#a347b7',
+		'#fecd00',
+		'#8e58b6'
 	];
 
 	let started = false;
@@ -178,77 +178,77 @@
 
 		// Basic Callbacks
 		onStart: function () {
-		  started = true;
-        },
+			started = true;
+		},
 		onRestart: function () {
-          $('#history').empty();
-        },
+			$('#history').empty();
+		},
 		onGameOver: function (score) {
-		    started = false;
-            socket.emit('gg', score);
-        },
+			started = false;
+			socket.emit('gg', score);
+		},
 
 		// When a line is made. Returns the number of lines, score assigned and total score
 		onLine: function (lines, scoreIncrement, score) { }
 	});
 
-  var users = [];
+	var users = [];
 
-  function log(channel, user, message) {
-    var index = users.indexOf(user);
-    if (index === -1) {
-      users.push(user);
-      index = users.length - 1;
-    }
-    var color = colors[index % colors.length];
-    $('#history').append(`
+	function log(channel, user, message) {
+		var index = users.indexOf(user);
+		if (index === -1) {
+			users.push(user);
+			index = users.length - 1;
+		}
+		var color = colors[index % colors.length];
+		$('#history').append(`
 		<li class="history-entry">
 		    <img class="channel" src="https://smooch.io/static_assets/images/home/icon-channels/icon-${channel}-gray.svg"/>
 			<span class="user" style="color: ${color};">${user || 'ąɲ๏ɲ'}</span>
 			<span class="command">${message}</span>
 		</li>
 	`);
-  }
-
-  socket.on('restart', function(restart) {
-    $('.game').blockrain('restart');
-    log(restart.channel, restart.user, 'Restarted the game!');
-  });
-
-  socket.on('command', function(command) {
-    if (!started) {
-      $('.game').blockrain('start');
-    }
-
-    function emoji(val) {
-      return `<span class="emoji">${val}</span>`;
 	}
 
-    function symbol(val) {
-      return `<span class="symbol">${val}</span>`;
-    }
-
-	var keys = command.keys.map(key => {
-	  switch (key) {
-        case 'left':
-          return emoji('👈');
-        case 'right':
-          return emoji('👉');
-        case 'up':
-          return emoji('🖕');
-        case 'down':
-          return emoji('👎');
-        case 'z':
-          return symbol('↺');
-        case 'x':
-          return symbol('↻');
-		default:
-		  return key;
-	  }
+	socket.on('restart', function (restart) {
+		$('.game').blockrain('restart');
+		log(restart.channel, restart.user, 'Restarted the game!');
 	});
 
-    log(command.channel, command.user, keys.join(' '));
-  });
+	socket.on('command', function (command) {
+		if (!started) {
+			$('.game').blockrain('start');
+		}
+
+		function emoji(val) {
+			return `<span class="emoji">${val}</span>`;
+		}
+
+		function symbol(val) {
+			return `<span class="symbol">${val}</span>`;
+		}
+
+		var keys = command.keys.map(key => {
+			switch (key) {
+				case 'left':
+					return emoji('👈');
+				case 'right':
+					return emoji('👉');
+				case 'up':
+					return emoji('🖕');
+				case 'down':
+					return emoji('👎');
+				case 'z':
+					return symbol('↺');
+				case 'x':
+					return symbol('↻');
+				default:
+					return key;
+			}
+		});
+
+		log(command.channel, command.user, keys.join(' '));
+	});
 </script>
 
 </html>
