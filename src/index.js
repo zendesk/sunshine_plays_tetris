@@ -20,6 +20,27 @@ app.set('env', process.env.NODE_ENV || 'development');
 app.set('port', process.env.PORT || 3000);
 
 const users = [];
+let canRestart = false;
+
+function handleKeys(message) {
+  const channel = message.source.type;
+  const sentKeys = (message.payload || message.text)
+    .toLowerCase()
+    .split('')
+    .map(c => VALID_CHARACTERS[c] && VALID_CHARACTERS[c].key)
+    .filter(v => v)
+    .map(sendKeys);
+
+  if (sentKeys.length) {
+    io.emit('command', {
+      user: message.name,
+      channel,
+      keys: sentKeys,
+    });
+  }
+
+  console.log(sentKeys);
+}
 
 app.post('/messages', async (req, res) => {
   if (!(req.body.messages && req.body.appUser)) {
@@ -27,7 +48,6 @@ app.post('/messages', async (req, res) => {
   }
 
   const { appUser, messages } = req.body;
-  // const { messages } = req.body;
   let channel;
 
   messages.forEach((message) => {
@@ -37,22 +57,20 @@ app.post('/messages', async (req, res) => {
 
     channel = message.source.type;
 
-    const sentKeys = (message.payload || message.text)
-      .toLowerCase()
-      .split('')
-      .map(c => VALID_CHARACTERS[c] && VALID_CHARACTERS[c].key)
-      .filter(v => v)
-      .map(sendKeys);
-
-    if (sentKeys.length) {
-      io.emit('command', {
-        user: message.name,
-        channel,
-        keys: sentKeys,
-      });
+    switch (message.payload || message.text) {
+      case 'r':
+        if (canRestart) {
+          io.emit('restart', {
+            user: message.name,
+            channel,
+          });
+          canRestart = false;
+        }
+        break;
+      default:
+        handleKeys(message);
+        break;
     }
-
-    console.log(sentKeys);
   });
 
   if (channel === 'viber') {
@@ -64,8 +82,10 @@ app.post('/messages', async (req, res) => {
 
 io.on('connection', (socket) => {
   socket.on('gg', (score) => {
+    canRestart = true;
     users.forEach((appUserId) => {
       sendMessage(appUserId, `Game Over! Score: ${score}`);
+      sendMessage(appUserId, 'Send "r" to restart.');
     });
   });
 });

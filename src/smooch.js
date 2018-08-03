@@ -29,9 +29,11 @@ const Smooch = new SmoochCore({
   keyId: process.env.SMOOCH_KEY_ID,
   secret: process.env.SMOOCH_SECRET,
   scope: 'app',
+  serviceUrl: process.env.SMOOCH_SERVICE_URL || undefined,
 });
 
 const MESSAGE_BASE = {
+  type: 'text',
   text: '',
   role: 'appMaker',
   name: 'Smooch Tetris',

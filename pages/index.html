@@ -84,6 +84,8 @@
       '#8e58b6'
 	];
 
+	let started = false;
+
 	$('.game').blockrain({
 		autoplay: false, // Let a bot play the game
 		autoplayRestart: true, // Restart the game automatically once a bot loses
@@ -121,9 +123,14 @@
 		scoreText: 'Score',
 
 		// Basic Callbacks
-		onStart: function () { },
-		onRestart: function () { },
+		onStart: function () {
+		  started = true;
+        },
+		onRestart: function () {
+          $('#history').empty();
+        },
 		onGameOver: function (score) {
+		    started = false;
             socket.emit('gg', score);
         },
 
@@ -133,13 +140,31 @@
 
   var users = [];
 
-  socket.on('command', function(command) {
-    var index = users.indexOf(command.user);
-    if (index == -1) {
-      users.push(command.user);
+  function log(channel, user, message) {
+    var index = users.indexOf(user);
+    if (index === -1) {
+      users.push(user);
       index = users.length - 1;
-	}
-	var color = colors[index % colors.length];
+    }
+    var color = colors[index % colors.length];
+    $('#history').append(`
+		<li class="history-entry">
+		    <img class="channel" src="https://smooch.io/static_assets/images/home/icon-channels/icon-${channel}-gray.svg"/>
+			<span class="user" style="color: ${color};">${user || 'ąɲ๏ɲ'}</span>
+			<span class="command">${message}</span>
+		</li>
+	`);
+  }
+
+  socket.on('restart', function(restart) {
+    $('.game').blockrain('restart');
+    log(restart.channel, restart.user, 'Restarted the game!');
+  });
+
+  socket.on('command', function(command) {
+    if (!started) {
+      $('.game').blockrain('start');
+    }
 
     function emoji(val) {
       return `<span class="emoji">${val}</span>`;
@@ -167,13 +192,8 @@
 		  return key;
 	  }
 	});
-    $('#history').append(`
-		<li class="history-entry">
-		    <img class="channel" src="https://smooch.io/static_assets/images/home/icon-channels/icon-${command.channel}-gray.svg"/>
-			<span class="user" style="color: ${color};">${command.user || 'ąɲ๏ɲ'}</span>
-			<span class="command">${keys.join(' ')}</span>
-		</li>
-	`);
+
+    log(command.channel, command.user, keys.join(' '));
   });
 </script>
 
