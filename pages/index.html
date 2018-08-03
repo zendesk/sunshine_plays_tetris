@@ -177,6 +177,9 @@
 <script src="/assets/blockrain.jquery.min.js"></script>
 
 <script>
+	var music = new Audio('/assets/tetris.mp3');
+	music.loop = true;
+	music.play();
 	var socket = io();
 
 	var colors = [
