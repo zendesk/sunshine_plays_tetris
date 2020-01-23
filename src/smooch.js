@@ -50,7 +50,7 @@ exports.sendMessage = (userId, message) => {
 exports.sendPayload = (userId) => {
   Smooch.appUsers.sendMessage(userId, {
     ...MESSAGE_BASE,
-    actions: Object.keys(VALID_CHARACTERS).map(c => ({
+    actions: Object.keys(VALID_CHARACTERS).map((c) => ({
       type: 'reply',
       text: VALID_CHARACTERS[c].icon,
       payload: c,

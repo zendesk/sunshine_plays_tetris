@@ -26,8 +26,8 @@ function handleKeys(message) {
   const sendKeys = (message.payload || message.text)
     .toLowerCase()
     .split('')
-    .map(c => VALID_CHARACTERS[c] && VALID_CHARACTERS[c].key)
-    .filter(v => v);
+    .map((c) => VALID_CHARACTERS[c] && VALID_CHARACTERS[c].key)
+    .filter((v) => v);
 
   if (sendKeys.length) {
     io.emit('command', {
@@ -94,6 +94,8 @@ server.listen(app.get('port'), (err) => {
     return;
   }
 
-  console.log(`Express server listening at http://localhost:${app.get('port')}`);
+  console.log(
+    `Express server listening at http://localhost:${app.get('port')}`,
+  );
   console.log(`env = ${app.get('env')}`);
 });
