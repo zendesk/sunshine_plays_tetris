@@ -1,7 +1,7 @@
 {
-  "name": "smooch-plays-pokemon",
+  "name": "sunshine-plays-tetris",
   "version": "1.0.0",
-  "description": "Smooch Plays Tetris!",
+  "description": "Sunshine Plays Tetris!",
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint . --ext .js",
@@ -11,14 +11,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/fxlemire/smooch-plays-tetris.git"
+    "url": "git+ssh://git@github.com:zendesk/sunshine_plays_tetris.git"
   },
-  "author": "Francois-Xavier Lemire <fxlemire@smooch.io>",
+  "author": {
+    "name": "Zendesk Sunshine",
+    "email": "fx@zendesk.com",
+    "url": "https://smooch.io/"
+  },
+  "contributors": [
+    "François Ubald Brien <fbrien@zendesk.com>",
+    "François-Xavier Lemire <fx@zendesk.com>"
+  ],
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://gitlab.com/fxlemire/smooch-plays-tetris/issues"
+    "url": "https://github.com/zendesk/sunshine_plays_tetris/issues"
   },
-  "homepage": "https://gitlab.com/fxlemire/smooch-plays-tetris#README",
+  "homepage": "https://github.com/zendesk/sunshine_plays_tetris#README",
   "devDependencies": {
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.9.0",

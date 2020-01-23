@@ -5,7 +5,7 @@ const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
 
-const { VALID_CHARACTERS, sendMessage, sendPayload } = require('./smooch');
+const { VALID_CHARACTERS, sendMessage, sendPayload } = require('./sunshine');
 
 const app = express();
 const server = http.Server(app);
