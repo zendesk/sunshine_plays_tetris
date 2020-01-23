@@ -4,6 +4,8 @@
   "description": "Smooch Plays Tetris!",
   "main": "src/index.js",
   "scripts": {
+    "lint": "eslint . --ext .js",
+    "prettier": "prettier '**/*.{css,js,json,md,html}'",
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,9 +20,9 @@
   },
   "homepage": "https://gitlab.com/fxlemire/smooch-plays-tetris#README",
   "devDependencies": {
-    "eslint": "^5.2.0",
-    "eslint-config-airbnb-base": "^13.0.0",
-    "eslint-plugin-import": "^2.13.0"
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.9.0",
+    "prettier": "1.19.1"
   },
   "dependencies": {
     "cors": "^2.8.4",
