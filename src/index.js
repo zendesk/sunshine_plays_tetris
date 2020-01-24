@@ -1,11 +1,11 @@
-require('dotenv-safe').load();
+require('dotenv-safe').config({ allowEmptyValues: true });
 const path = require('path');
 const cors = require('cors');
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
 
-const { VALID_CHARACTERS, sendMessage, sendPayload } = require('./smooch');
+const { VALID_CHARACTERS, sendMessage, sendPayload } = require('./sunshine');
 
 const app = express();
 const server = http.Server(app);
@@ -26,8 +26,8 @@ function handleKeys(message) {
   const sendKeys = (message.payload || message.text)
     .toLowerCase()
     .split('')
-    .map(c => VALID_CHARACTERS[c] && VALID_CHARACTERS[c].key)
-    .filter(v => v);
+    .map((c) => VALID_CHARACTERS[c] && VALID_CHARACTERS[c].key)
+    .filter((v) => v);
 
   if (sendKeys.length) {
     io.emit('command', {
@@ -72,7 +72,7 @@ app.post('/messages', async (req, res) => {
   });
 
   if (channel === 'viber') {
-    sendPayload(appUser._id); // eslint-disable-line no-underscore-dangle
+    sendPayload(appUser._id);
   }
 
   res.end();
@@ -94,6 +94,8 @@ server.listen(app.get('port'), (err) => {
     return;
   }
 
-  console.log(`Express server listening at http://localhost:${app.get('port')}`);
+  console.log(
+    `Express server listening at http://localhost:${app.get('port')}`,
+  );
   console.log(`env = ${app.get('env')}`);
 });

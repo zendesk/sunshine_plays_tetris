@@ -1,4 +1,5 @@
-const SmoochCore = require('smooch-core');
+const SunshineCore = require('smooch-core');
+const url = require('url');
 
 const VALID_CHARACTERS = {
   q: {
@@ -25,32 +26,32 @@ const VALID_CHARACTERS = {
 
 exports.VALID_CHARACTERS = VALID_CHARACTERS;
 
-const Smooch = new SmoochCore({
-  keyId: process.env.SMOOCH_KEY_ID,
-  secret: process.env.SMOOCH_SECRET,
+const Sunshine = new SunshineCore({
+  keyId: process.env.SUNSHINE_KEY_ID,
+  secret: process.env.SUNSHINE_SECRET,
   scope: 'app',
-  serviceUrl: process.env.SMOOCH_SERVICE_URL || undefined,
+  serviceUrl: process.env.SUNSHINE_SERVICE_URL || undefined,
 });
 
 const MESSAGE_BASE = {
   type: 'text',
   text: '',
   role: 'appMaker',
-  name: 'Smooch Tetris',
-  avatarUrl: 'https://fxlemire.ngrok.io/assets/SmoochTetris.png',
+  name: 'Sunshine Tetris',
+  avatarUrl: url.resolve(process.env.HOST, '/assets/sunshine-tetris.png'),
 };
 
 exports.sendMessage = (userId, message) => {
-  Smooch.appUsers.sendMessage(userId, {
+  Sunshine.appUsers.sendMessage(userId, {
     ...MESSAGE_BASE,
     text: message,
   });
 };
 
 exports.sendPayload = (userId) => {
-  Smooch.appUsers.sendMessage(userId, {
+  Sunshine.appUsers.sendMessage(userId, {
     ...MESSAGE_BASE,
-    actions: Object.keys(VALID_CHARACTERS).map(c => ({
+    actions: Object.keys(VALID_CHARACTERS).map((c) => ({
       type: 'reply',
       text: VALID_CHARACTERS[c].icon,
       payload: c,

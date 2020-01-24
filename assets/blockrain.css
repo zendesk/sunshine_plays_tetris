@@ -15,7 +15,7 @@
   display: block;
   border-radius: 100%;
   border: 1px solid white;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   z-index: 10;
 
   -webkit-touch-callout: none;
@@ -28,7 +28,7 @@
   text-align: center;
 }
 .blockrain-touch:active {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .blockrain-touch-left {
@@ -36,14 +36,14 @@
   bottom: 10px;
 }
 .blockrain-touch-left::after {
-  content: "<";
+  content: '<';
 }
 .blockrain-touch-right {
   right: -60px;
   bottom: 10px;
 }
 .blockrain-touch-right::after {
-  content: ">";
+  content: '>';
 }
 
 .blockrain-touch-rotate-left {
@@ -51,7 +51,7 @@
   bottom: 80px;
 }
 .blockrain-touch-rotate-left::after {
-  content: "<o";
+  content: '<o';
 }
 
 .blockrain-touch-rotate-right {
@@ -59,7 +59,7 @@
   bottom: 80px;
 }
 .blockrain-touch-rotate-right::after {
-  content: "o>";
+  content: 'o>';
 }
 
 .blockrain-touch-drop {
@@ -68,7 +68,7 @@
   bottom: -60px;
 }
 .blockrain-touch-drop::after {
-  content: ".";
+  content: '.';
 }
 
 /* Buttons */
@@ -86,7 +86,7 @@
 }
 .blockrain-btn::before {
   position: absolute;
-  content: "";
+  content: '';
   top: 100%;
   left: 0px;
   bottom: 0px;
@@ -98,7 +98,7 @@
 }
 .blockrain-btn::after {
   position: absolute;
-  content: "";
+  content: '';
   top: 0px;
   left: 100%;
   bottom: 0px;
@@ -120,7 +120,6 @@
   right: -8px;
 }
 
-
 /* Score */
 .blockrain-score-holder {
   position: absolute;
@@ -129,7 +128,7 @@
   text-align: right;
 }
 .blockrain-score-msg {
-  font-size: 14px;  
+  font-size: 14px;
   line-height: 100%;
   margin-bottom: 0.2em;
 }
@@ -139,25 +138,27 @@
 }
 
 /* Menu */
-.blockrain-start-holder, .blockrain-game-over-holder {
+.blockrain-start-holder,
+.blockrain-game-over-holder {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
 
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
   text-align: center;
 }
-.blockrain-start, .blockrain-game-over {
+.blockrain-start,
+.blockrain-game-over {
   position: absolute;
   top: 50%;
   width: 100%;
   transform: translateY(-50%);
 }
 
-.blockrain-start-msg, .blockrain-game-over-msg {
+.blockrain-start-msg,
+.blockrain-game-over-msg {
   font-size: 18px;
   margin-bottom: 30px;
 }
-
