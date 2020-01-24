@@ -72,7 +72,7 @@ app.post('/messages', async (req, res) => {
   });
 
   if (channel === 'viber') {
-    sendPayload(appUser._id); // eslint-disable-line no-underscore-dangle
+    sendPayload(appUser._id);
   }
 
   res.end();
