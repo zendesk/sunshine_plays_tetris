@@ -2,6 +2,8 @@
 
 This is a chat-powered multiplayer cooperative Tetris game made possible by [Zendesk Sunshine Conversations](https://smooch.io).
 
+![Sunshine Plays Tetris®!](https://user-images.githubusercontent.com/4381789/73098474-7587e900-3eb7-11ea-8e32-a3b932268d86.png)
+
 ## Prerequisites
 
 ### Zendesk Sunshine Conversations Account
