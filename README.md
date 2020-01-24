@@ -55,7 +55,7 @@ On your Sunshine account dashboard, go to the `Integrations` tab.
 
 Make an integration with your favorite channel. The channel that provides the best experience to play _Sunshine Plays Tetris!_ is [Viber](https://www.viber.com/), but we also recommend other channels like [Messenger](https://messenger.com), [Telegram](https://telegram.org/) and [Line](https://line.me/en/) for their ease of integration.
 
-Once you are dont with your integrations, make sure you link to them [in the website](./pages/index.html) (go to the _README_ section in the div with id `channels`).
+Once you are done with your integrations, make sure you link to them [in the website](./pages/index.html) (go to the _README_ section in the div with id `channels`).
 
 ### ❤️ Tetris®
 
