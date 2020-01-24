@@ -1,4 +1,5 @@
 const SunshineCore = require('smooch-core');
+const url = require('url');
 
 const VALID_CHARACTERS = {
   q: {
@@ -37,7 +38,7 @@ const MESSAGE_BASE = {
   text: '',
   role: 'appMaker',
   name: 'Sunshine Tetris',
-  avatarUrl: 'https://fxlemire.ngrok.io/assets/sunshine-tetris.png',
+  avatarUrl: url.resolve(process.env.HOST, '/assets/sunshine-tetris.png'),
 };
 
 exports.sendMessage = (userId, message) => {

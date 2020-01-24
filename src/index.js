@@ -1,4 +1,4 @@
-require('dotenv-safe').load();
+require('dotenv-safe').config({ allowEmptyValues: true });
 const path = require('path');
 const cors = require('cors');
 const express = require('express');
